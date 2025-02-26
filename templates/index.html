@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block title %}Business Game - Home{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <h1>Business Game</h1>
+        <p class="lead">
+            A turn-based business simulation game modeling a global manufacturing company as a Markov Decision Process.
+        </p>
+        <p>
+            In this game, you'll make strategic decisions for your manufacturing company each quarter.
+            Set prices and production volumes to maximize profits and grow your company's value.
+            Compete against an AI competitor and navigate changing market conditions.
+        </p>
+        <div class="mt-4">
+            <a href="/games/new" class="btn btn-primary btn-lg">Start New Game</a>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h5 class="card-title mb-0">Recent Games</h5>
+            </div>
+            <div class="card-body">
+                {% if games %}
+                    <div class="list-group">
+                        {% for game in games %}
+                            <a href="/games/{{ game.game_id }}" class="list-group-item list-group-item-action">
+                                <div class="d-flex w-100 justify-content-between">
+                                    <h6 class="mb-1">Quarter {{ game.current_quarter }}</h6>
+                                    <small>{{ game.created_at }}</small>
+                                </div>
+                                <div class="d-flex justify-content-between">
+                                    <span>Stock Price: {{ game.stock_price }}</span>
+                                    <span>Cash: {{ game.cash }}</span>
+                                </div>
+                                <small>Market Share: {{ game.market_share }}</small>
+                            </a>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p class="text-center">No games found. Start a new game!</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-5">
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body text-center">
+                <h5 class="card-title">Strategic Pricing</h5>
+                <p class="card-text">Set optimal prices to balance market share and profit margins.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body text-center">
+                <h5 class="card-title">Production Planning</h5>
+                <p class="card-text">Manage production volumes to meet demand while controlling costs.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body text-center">
+                <h5 class="card-title">Market Dynamics</h5>
+                <p class="card-text">Adapt to changing market conditions and competitor behavior.</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

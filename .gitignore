@@ -33,4 +33,19 @@ coverage.xml
 
 # OS specific files
 .DS_Store
-Thumbs.db 
+Thumbs.db
+
+# Environment variables
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+
+# MongoDB data directory
+data/
+mongodb/
+
+# Logs
+logs/
+*.log 

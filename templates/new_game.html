@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block title %}Business Game - New Game{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h5 class="card-title mb-0">Create New Game</h5>
+            </div>
+            <div class="card-body">
+                <form method="post" action="/games/new">
+                    <div class="mb-3">
+                        <label for="game_name" class="form-label">Game Name (Optional)</label>
+                        <input type="text" class="form-control" id="game_name" name="game_name" placeholder="My Business Simulation">
+                    </div>
+                    
+                    <h5 class="mt-4 mb-3">Company Settings</h5>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="initial_cash" class="form-label">Initial Cash (millions)</label>
+                                <input type="number" class="form-control" id="initial_cash" name="initial_cash" value="10.0" step="0.1" min="1.0">
+                                <div class="form-text">Starting cash for your company</div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="initial_assets" class="form-label">Initial Assets (millions)</label>
+                                <input type="number" class="form-control" id="initial_assets" name="initial_assets" value="50.0" step="0.1" min="10.0">
+                                <div class="form-text">Starting assets for your company</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="initial_capacity" class="form-label">Initial Production Capacity (units)</label>
+                        <input type="number" class="form-control" id="initial_capacity" name="initial_capacity" value="1000" step="100" min="100">
+                        <div class="form-text">Maximum production volume per quarter</div>
+                    </div>
+                    
+                    <h5 class="mt-4 mb-3">Market Settings</h5>
+                    <div class="mb-3">
+                        <label for="initial_market_size" class="form-label">Initial Market Size (units)</label>
+                        <input type="number" class="form-control" id="initial_market_size" name="initial_market_size" value="10000" step="1000" min="1000">
+                        <div class="form-text">Total market demand per quarter</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="initial_player_market_share" class="form-label">Initial Market Share</label>
+                                <input type="number" class="form-control" id="initial_player_market_share" name="initial_player_market_share" value="0.3" step="0.05" min="0.1" max="0.9">
+                                <div class="form-text">Your starting market share (0.1-0.9)</div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="initial_competitor_price" class="form-label">Initial Competitor Price</label>
+                                <input type="number" class="form-control" id="initial_competitor_price" name="initial_competitor_price" value="100.0" step="5.0" min="50.0">
+                                <div class="form-text">Starting price of competitor's product</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <h5 class="mt-4 mb-3">Game Mechanics</h5>
+                    <div class="mb-3">
+                        <label for="price_elasticity" class="form-label">Price Elasticity</label>
+                        <input type="number" class="form-control" id="price_elasticity" name="price_elasticity" value="1.5" step="0.1" min="0.5" max="3.0">
+                        <div class="form-text">How sensitive demand is to price changes (higher = more sensitive)</div>
+                    </div>
+                    
+                    <div class="d-grid gap-2 mt-4">
+                        <button type="submit" class="btn btn-primary">Create Game</button>
+                        <a href="/" class="btn btn-secondary">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 
