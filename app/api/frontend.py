@@ -7,7 +7,7 @@ from fastapi.templating import Jinja2Templates
 from typing import Optional
 import json
 
-from app.models.game import GameConfig, PlayerAction, PricingDecision, ProductionDecision
+from app.models.game import GameConfig, PlayerAction, PricingDecision, ProductionDecision, MarketingDecision, RAndDDecision, CapacityDecision, SupplyChainDecision
 from app.db.repository import GameRepository
 
 # Create router
@@ -137,7 +137,8 @@ async def view_game(request: Request, game_id: str):
         "game.html", 
         {
             "request": request, 
-            "game": game_data, 
+            "game": game_data,
+            "game_state": game_state,
             "chart_data": json.dumps(chart_data)
         }
     )
@@ -148,15 +149,57 @@ async def submit_action(
     request: Request,
     game_id: str,
     price: float = Form(...),
-    production_volume: float = Form(...)
+    production_volume: float = Form(...),
+    marketing_budget: float = Form(0.0),
+    market_allocation: float = Form(100.0),
+    r_and_d_budget: float = Form(0.0),
+    r_and_d_focus: str = Form("balanced"),
+    capacity_expansion: float = Form(0.0),
+    supply_chain_investment: float = Form(0.0),
+    supply_chain_focus: str = Form("balanced")
 ):
     """
     Submit player actions for a quarter.
     """
+    # Create player action components
+    pricing_decision = PricingDecision(price=price)
+    production_decision = ProductionDecision(volume=production_volume)
+    
+    marketing_decision = None
+    if marketing_budget > 0:
+        marketing_decision = MarketingDecision(
+            budget=marketing_budget,
+            segment_allocation={"mass_market": market_allocation / 100}
+        )
+    
+    r_and_d_decision = None
+    if r_and_d_budget > 0:
+        r_and_d_decision = RAndDDecision(
+            budget=r_and_d_budget,
+            focus=r_and_d_focus
+        )
+    
+    capacity_decision = None
+    if capacity_expansion > 0:
+        capacity_decision = CapacityDecision(
+            expansion=capacity_expansion
+        )
+    
+    supply_chain_decision = None
+    if supply_chain_investment > 0:
+        supply_chain_decision = SupplyChainDecision(
+            investment=supply_chain_investment,
+            focus=supply_chain_focus
+        )
+    
     # Create player action
     action = PlayerAction(
-        pricing_decision=PricingDecision(price=price),
-        production_decision=ProductionDecision(volume=production_volume)
+        pricing_decision=pricing_decision,
+        production_decision=production_decision,
+        marketing_decision=marketing_decision,
+        r_and_d_decision=r_and_d_decision,
+        capacity_decision=capacity_decision,
+        supply_chain_decision=supply_chain_decision
     )
     
     # Call API to submit action

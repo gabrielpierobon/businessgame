@@ -11,9 +11,12 @@ services:
       - MONGO_URL=mongodb://mongo:27017
       - MONGO_DB_NAME=business_game
       - DEBUG=True
+      - PYTHONUNBUFFERED=1
+      - LOG_LEVEL=debug
     depends_on:
-      - mongo
-    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+      mongo:
+        condition: service_healthy
+    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload --log-level debug
 
   mongo:
     image: mongo:5.0
@@ -21,6 +24,12 @@ services:
       - "27017:27017"
     volumes:
       - mongo_data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 5s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
 
 volumes:
   mongo_data: 
