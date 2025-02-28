@@ -3,6 +3,7 @@
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background-color: #f8f9fa;
+    line-height: 1.6;
 }
 
 .navbar-brand {
@@ -29,14 +30,23 @@ body {
 /* Metric styles */
 .metric-card {
     transition: transform 0.2s;
+    height: 100%;
 }
 
 .metric-card:hover {
     transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
 
 .metric-value {
-    color: #0d6efd;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #2c3e50;
+}
+
+.metric-label {
+    font-size: 0.9rem;
+    color: #7f8c8d;
 }
 
 /* Form styles */
@@ -58,17 +68,231 @@ body {
 
 /* Chart styles */
 .chart-container {
+    height: 300px;
+    margin-bottom: 2rem;
     position: relative;
-    margin: auto;
+}
+
+/* Visualization Styles */
+.treemap-container {
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.treemap-cell {
+    transition: opacity 0.2s;
+}
+
+.treemap-cell:hover {
+    opacity: 0.8;
+}
+
+.world-map-container {
+    height: 400px;
+    position: relative;
+}
+
+.world-map-tooltip {
+    position: absolute;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 8px;
+    pointer-events: none;
+}
+
+/* Network Graph */
+.network-node {
+    fill: #3498db;
+    stroke: #fff;
+    stroke-width: 2px;
+}
+
+.network-link {
+    stroke: #95a5a6;
+    stroke-opacity: 0.6;
+}
+
+/* Decision Impact Preview */
+.preview-value {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+.preview-value.positive {
+    color: #27ae60;
+}
+
+.preview-value.negative {
+    color: #c0392b;
+}
+
+.preview-description {
+    font-size: 0.9rem;
+    color: #7f8c8d;
+}
+
+/* Help System */
+.help-section {
+    margin-bottom: 2rem;
+}
+
+.help-section h5 {
+    color: #2c3e50;
+    margin-bottom: 1rem;
+}
+
+.help-section ul {
+    padding-left: 1.5rem;
+}
+
+.search-result {
+    padding: 1rem;
+    border-bottom: 1px solid #eee;
+}
+
+.search-result:last-child {
+    border-bottom: none;
+}
+
+.search-result h6 {
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+}
+
+/* Tutorial Styles */
+.introjs-tooltip {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.introjs-tooltiptext {
+    padding: 1rem;
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+.introjs-button {
+    background: #3498db;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    transition: background 0.2s;
+}
+
+.introjs-button:hover {
+    background: #2980b9;
+}
+
+/* Tooltips */
+.tippy-box {
+    background-color: #fff;
+    color: #2c3e50;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.tippy-content {
+    padding: 1rem;
 }
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
+    .chart-container {
+        height: 250px;
+    }
+    
+    .world-map-container {
+        height: 300px;
+    }
+    
     .metric-value {
         font-size: 1.2rem;
     }
     
-    .chart-container {
-        height: 250px;
+    .metric-label {
+        font-size: 0.8rem;
     }
+}
+
+/* Interactive Elements */
+.interactive-control {
+    position: relative;
+    cursor: pointer;
+}
+
+.interactive-control:hover::after {
+    content: attr(data-help-text);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(44, 62, 80, 0.9);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    white-space: nowrap;
+    z-index: 1000;
+}
+
+/* Animation Effects */
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+.highlight-element {
+    animation: pulse 1s infinite;
+}
+
+/* Modal Enhancements */
+.modal-content {
+    border-radius: 8px;
+    border: none;
+}
+
+.modal-header {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #e9ecef;
+    border-radius: 8px 8px 0 0;
+}
+
+.modal-body {
+    padding: 1.5rem;
+}
+
+/* Accordion Customization */
+.accordion-button:not(.collapsed) {
+    background-color: #e3f2fd;
+    color: #1565c0;
+}
+
+.accordion-button:focus {
+    box-shadow: none;
+    border-color: #90caf9;
+}
+
+/* Form Feedback */
+.decision-feedback {
+    margin-top: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.decision-feedback.warning {
+    color: #f39c12;
+}
+
+.decision-feedback.danger {
+    color: #e74c3c;
+}
+
+.decision-feedback.success {
+    color: #27ae60;
 } 

@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Business Game - Quarter {{ game.current_quarter }}{% endblock %}
+{% block title %}Business Game - Quarter {{ game_state.metadata.current_quarter }}{% endblock %}
 
 {% block head %}
 <style>
@@ -18,200 +18,413 @@
     .chart-container {
         height: 300px;
     }
+    .tooltip-icon {
+        color: #6c757d;
+        cursor: help;
+        margin-left: 5px;
+    }
+    .metric-help {
+        font-size: 0.8rem;
+        color: #6c757d;
+        margin-top: 2px;
+    }
 </style>
 {% endblock %}
 
 {% block content %}
-<div class="row mb-4">
-    <div class="col-md-8">
-        <h1>Business Game - Quarter {{ game.current_quarter }}</h1>
-        <p class="lead">Make strategic decisions for your manufacturing company</p>
-    </div>
-    <div class="col-md-4 text-end">
-        <div class="d-flex flex-column align-items-end">
-            <h3 class="mb-0">{{ game.stock_price }}</h3>
-            <span class="text-muted">Stock Price</span>
-        </div>
-    </div>
-</div>
-
-<div class="row mb-4">
-    <div class="col-md-4">
-        <div class="card metric-card">
-            <div class="card-body">
-                <h5 class="card-title">Company Financials</h5>
-                <div class="row mt-3">
-                    <div class="col-6">
-                        <div class="metric-label">Cash</div>
-                        <div class="metric-value">{{ game.cash }}</div>
-                    </div>
-                    <div class="col-6">
-                        <div class="metric-label">Assets</div>
-                        <div class="metric-value">{{ game.assets }}</div>
-                    </div>
-                </div>
-                <div class="row mt-3">
-                    <div class="col-6">
-                        <div class="metric-label">Revenue</div>
-                        <div class="metric-value">{{ game.revenue }}</div>
-                    </div>
-                    <div class="col-6">
-                        <div class="metric-label">Profit</div>
-                        <div class="metric-value">{{ game.profit }}</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+<div class="container mt-4">
+    <h1>Business Game - Quarter {{ game_state.metadata.current_quarter }}</h1>
     
-    <div class="col-md-4">
-        <div class="card metric-card">
-            <div class="card-body">
-                <h5 class="card-title">Production</h5>
-                <div class="row mt-3">
-                    <div class="col-6">
-                        <div class="metric-label">Inventory</div>
-                        <div class="metric-value">{{ game.inventory }}</div>
-                    </div>
-                    <div class="col-6">
-                        <div class="metric-label">Capacity</div>
-                        <div class="metric-value">{{ game.capacity }}</div>
-                    </div>
+    <!-- Company Overview -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h2>Company Overview</h2>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-3">
+                    <h5>Cash</h5>
+                    <p>${{ "%.2f"|format(game_state.company_state.cash) }}M</p>
                 </div>
-                <div class="row mt-3">
-                    <div class="col-6">
-                        <div class="metric-label">Costs</div>
-                        <div class="metric-value">{{ game.costs }}</div>
-                    </div>
-                    <div class="col-6">
-                        <div class="metric-label">Tax Rate</div>
-                        <div class="metric-value">{{ game.tax_rate }}</div>
-                    </div>
+                <div class="col-md-3">
+                    <h5>Stock Price</h5>
+                    <p>${{ "%.2f"|format(game_state.stock_price) }}</p>
+                </div>
+                <div class="col-md-3">
+                    <h5>Market Share</h5>
+                    <p>{{ "%.1f"|format(game_state.market_state.player_market_share * 100) }}%</p>
+                </div>
+                <div class="col-md-3">
+                    <h5>Product Quality</h5>
+                    <p>{{ "%.2f"|format(game_state.company_state.product_quality) }}x</p>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-md-3">
+                    <h5>Marketing Effectiveness</h5>
+                    <p>{{ "%.2f"|format(game_state.company_state.marketing_effectiveness) }}x</p>
+                </div>
+                <div class="col-md-3">
+                    <h5>R&D Level</h5>
+                    <p>{{ "%.2f"|format(game_state.company_state.r_and_d_level) }}x</p>
+                </div>
+                <div class="col-md-3">
+                    <h5>Supply Chain Efficiency</h5>
+                    <p>{{ "%.2f"|format(game_state.company_state.supply_chain_efficiency) }}x</p>
+                </div>
+                <div class="col-md-3">
+                    <h5>Supplier Lead Time</h5>
+                    <p>{{ "%.1f"|format(game_state.company_state.supplier_lead_time) }} quarters</p>
                 </div>
             </div>
         </div>
     </div>
-    
-    <div class="col-md-4">
-        <div class="card metric-card">
-            <div class="card-body">
-                <h5 class="card-title">Market</h5>
-                <div class="row mt-3">
-                    <div class="col-6">
-                        <div class="metric-label">Market Size</div>
-                        <div class="metric-value">{{ game.market_size }}</div>
-                    </div>
-                    <div class="col-6">
-                        <div class="metric-label">Growth</div>
-                        <div class="metric-value">{{ game.market_growth }}</div>
-                    </div>
-                </div>
-                <div class="row mt-3">
-                    <div class="col-6">
-                        <div class="metric-label">Your Share</div>
-                        <div class="metric-value">{{ game.player_market_share }}</div>
-                    </div>
-                    <div class="col-6">
-                        <div class="metric-label">Competitor Price</div>
-                        <div class="metric-value">{{ game.competitor_price }}</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
-<div class="row mb-4">
-    <div class="col-md-12">
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">Performance History</h5>
-                <div class="chart-container">
-                    <canvas id="performanceChart"></canvas>
-                </div>
-            </div>
+    <!-- Quarterly Decisions Form -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h2>Quarterly Decisions</h2>
         </div>
-    </div>
-</div>
-
-<div class="row">
-    <div class="col-md-6 offset-md-3">
-        <div class="card">
-            <div class="card-header bg-primary text-white">
-                <h5 class="card-title mb-0">Quarterly Decisions</h5>
-            </div>
-            <div class="card-body">
-                <form method="post" action="/games/{{ game.game_id }}/actions">
-                    <div class="mb-3">
-                        <label for="price" class="form-label">Product Price</label>
-                        <div class="input-group">
-                            <span class="input-group-text">$</span>
-                            <input type="number" class="form-control" id="price" name="price" value="100.0" step="0.1" min="50.0" required>
+        <div class="card-body">
+            <form method="POST" action="/games/{{ game_state.metadata.game_id }}/actions">
+                <div class="row mb-4">
+                    <!-- Production & Pricing -->
+                    <div class="col-md-3">
+                        <h4>Production & Pricing</h4>
+                        <div class="form-group">
+                            <label for="price">Price per Unit ($)</label>
+                            <input type="number" class="form-control" id="price" name="price" 
+                                   min="50" step="0.01" required
+                                   value="{{ last_action.pricing_decision.price if last_action else 100 }}">
                         </div>
-                        <div class="form-text">Set your product price. Competitor price is {{ game.competitor_price }}</div>
+                        <div class="form-group">
+                            <label for="production_volume">Production Volume (units)</label>
+                            <input type="number" class="form-control" id="production_volume" name="production_volume" min="0" max="{{ game_state.company_state.capacity }}" value="{{ last_action.production_decision.volume if last_action else 1000 }}" required>
+                            <small class="form-text text-muted">Maximum capacity: {{ game_state.company_state.capacity }} units</small>
+                        </div>
                     </div>
                     
-                    <div class="mb-3">
-                        <label for="production_volume" class="form-label">Production Volume</label>
-                        <input type="number" class="form-control" id="production_volume" name="production_volume" value="500" step="10" min="0" max="{{ game.capacity.split(' ')[0] | int }}" required>
-                        <div class="form-text">Set production volume for the quarter (0-{{ game.capacity }})</div>
+                    <!-- Marketing Decisions -->
+                    <div class="col-md-3">
+                        <h4>Marketing</h4>
+                        <div class="form-group">
+                            <label for="marketing_budget">Marketing Budget ($M)</label>
+                            <input type="number" class="form-control" id="marketing_budget" name="marketing_budget" 
+                                   min="0" step="0.1" required
+                                   value="{{ last_action.marketing_decision.budget if last_action and last_action.marketing_decision else 0 }}">
+                            <small class="form-text text-muted">
+                                Current effectiveness: {{ "%.2f"|format(game_state.company_state.marketing_effectiveness) }}x
+                            </small>
+                        </div>
+                        <div class="form-group">
+                            <label>Market Focus</label>
+                            <div class="input-group">
+                                <input type="range" class="form-control" id="market_allocation" name="market_allocation" 
+                                       min="0" max="100" value="100">
+                                <div class="input-group-append">
+                                    <span class="input-group-text">Mass Market: <span id="allocation_value">100</span>%</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    
-                    <div class="d-grid gap-2">
-                        <button type="submit" class="btn btn-primary">Submit Decisions</button>
+
+                    <!-- R&D Decisions -->
+                    <div class="col-md-3">
+                        <h4>Research & Development</h4>
+                        <div class="form-group">
+                            <label for="r_and_d_budget">R&D Budget ($M)</label>
+                            <input type="number" class="form-control" id="r_and_d_budget" name="r_and_d_budget" 
+                                   min="0" step="0.1" required
+                                   value="{{ last_action.r_and_d_decision.budget if last_action and last_action.r_and_d_decision else 0 }}">
+                            <small class="form-text text-muted">
+                                Current R&D level: {{ "%.2f"|format(game_state.company_state.r_and_d_level) }}x
+                            </small>
+                        </div>
+                        <div class="form-group">
+                            <label for="r_and_d_focus">R&D Focus</label>
+                            <select class="form-control" id="r_and_d_focus" name="r_and_d_focus">
+                                <option value="balanced" {% if last_action and last_action.r_and_d_decision and last_action.r_and_d_decision.focus == "balanced" %}selected{% endif %}>
+                                    Balanced Approach
+                                </option>
+                                <option value="cost_reduction" {% if last_action and last_action.r_and_d_decision and last_action.r_and_d_decision.focus == "cost_reduction" %}selected{% endif %}>
+                                    Cost Reduction
+                                </option>
+                                <option value="quality_improvement" {% if last_action and last_action.r_and_d_decision and last_action.r_and_d_decision.focus == "quality_improvement" %}selected{% endif %}>
+                                    Quality Improvement
+                                </option>
+                                <option value="innovation" {% if last_action and last_action.r_and_d_decision and last_action.r_and_d_decision.focus == "innovation" %}selected{% endif %}>
+                                    Innovation
+                                </option>
+                            </select>
+                        </div>
                     </div>
-                </form>
+
+                    <!-- Capacity Decisions -->
+                    <div class="col-md-3">
+                        <h4>Capacity Management</h4>
+                        <div class="form-group">
+                            <label for="capacity_expansion">Capacity Expansion (units)</label>
+                            <input type="number" class="form-control" id="capacity_expansion" name="capacity_expansion" 
+                                   min="0" step="100" required
+                                   value="{{ last_action.capacity_decision.expansion if last_action and last_action.capacity_decision else 0 }}">
+                            <small class="form-text text-muted">
+                                Current capacity: {{ game_state.company_state.capacity }} units<br>
+                                Cost: $1M per unit (with volume discount)<br>
+                                Lead time: 2 quarters
+                            </small>
+                        </div>
+                        {% if game_state.company_state.pending_expansions %}
+                        <div class="alert alert-info">
+                            <h6>Pending Expansions:</h6>
+                            <ul class="list-unstyled">
+                            {% for expansion in game_state.company_state.pending_expansions %}
+                                <li>+{{ expansion.size }} units ({{ expansion.quarters_remaining }} quarters remaining)</li>
+                            {% endfor %}
+                            </ul>
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Supply Chain Management -->
+                    <div class="col-md-3">
+                        <h4>Supply Chain Management</h4>
+                        <div class="form-group">
+                            <label for="supply_chain_investment">Supply Chain Investment ($M)</label>
+                            <input type="number" class="form-control" id="supply_chain_investment" 
+                                   name="supply_chain_investment" min="0" step="0.1" required
+                                   value="{{ last_action.supply_chain_decision.investment if last_action and last_action.supply_chain_decision else 0 }}">
+                            <small class="form-text text-muted">
+                                Current efficiency: {{ "%.2f"|format(game_state.company_state.supply_chain_efficiency) }}x<br>
+                                Supplier relationship: {{ "%.2f"|format(game_state.company_state.supplier_relationship) }}x<br>
+                                Lead time: {{ "%.1f"|format(game_state.company_state.supplier_lead_time) }} quarters
+                            </small>
+                        </div>
+                        <div class="form-group">
+                            <label for="supply_chain_focus">Investment Focus</label>
+                            <select class="form-control" id="supply_chain_focus" name="supply_chain_focus">
+                                <option value="balanced" {% if last_action and last_action.supply_chain_decision and last_action.supply_chain_decision.focus == "balanced" %}selected{% endif %}>
+                                    Balanced Approach
+                                </option>
+                                <option value="efficiency" {% if last_action and last_action.supply_chain_decision and last_action.supply_chain_decision.focus == "efficiency" %}selected{% endif %}>
+                                    Operational Efficiency
+                                </option>
+                                <option value="relationship" {% if last_action and last_action.supply_chain_decision and last_action.supply_chain_decision.focus == "relationship" %}selected{% endif %}>
+                                    Supplier Relationships
+                                </option>
+                                <option value="lead_time" {% if last_action and last_action.supply_chain_decision and last_action.supply_chain_decision.focus == "lead_time" %}selected{% endif %}>
+                                    Lead Time Reduction
+                                </option>
+                            </select>
+                        </div>
+                        <div class="alert alert-info">
+                            <h6>Inventory Holding Cost:</h6>
+                            <p>${{ "%.2f"|format(game_state.company_state.inventory * 0.1 / game_state.company_state.supply_chain_efficiency) }}M per quarter</p>
+                        </div>
+                        {% if game_state.company_state.active_disruptions %}
+                        <div class="alert alert-warning">
+                            <h6>Active Supply Chain Disruptions:</h6>
+                            {% for disruption in game_state.company_state.active_disruptions %}
+                            <div class="disruption-item mb-2">
+                                <strong>{{ disruption.description }}</strong>
+                                <small class="d-block text-muted">
+                                    Duration: {{ disruption.quarters_remaining }} quarter(s) remaining<br>
+                                    Impact:<br>
+                                    - Lead Time: {{ "%.1f"|format(disruption.impact.lead_time) }}x<br>
+                                    - Efficiency: {{ "%.1f"|format(disruption.impact.efficiency) }}x<br>
+                                    - Relationship: {{ "%.1f"|format(disruption.impact.relationship) }}x
+                                </small>
+                            </div>
+                            {% endfor %}
+                            <small class="d-block mt-2">
+                                <i class="fas fa-info-circle"></i> Strong supplier relationships reduce the probability of disruptions.
+                            </small>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Submit Decisions</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Market Information -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h2>Market Information</h2>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-3">
+                    <h5>Market Size</h5>
+                    <p>{{ "%.0f"|format(game_state.market_state.market_size) }} units</p>
+                </div>
+                <div class="col-md-3">
+                    <h5>Market Growth</h5>
+                    <p>{{ "%.1f"|format(game_state.market_state.market_growth * 100) }}%</p>
+                </div>
+                <div class="col-md-3">
+                    <h5>Competitor Price</h5>
+                    <p>${{ "%.2f"|format(game_state.market_state.competitor_price) }}</p>
+                </div>
+                <div class="col-md-3">
+                    <h5>Competitor Quality</h5>
+                    <p>{{ "%.2f"|format(game_state.market_state.competitor_quality) }}x</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Performance Charts -->
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h2>Financial Performance</h2>
+                </div>
+                <div class="card-body">
+                    <canvas id="financialChart"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h2>Supply Chain Metrics</h2>
+                </div>
+                <div class="card-body">
+                    <canvas id="supplyChainChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Supply Chain Disruption History -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h2>Supply Chain Risk Management</h2>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5>Disruption Prevention</h5>
+                    <p>
+                        <i class="fas fa-shield-alt"></i> Supplier Relationship Score: 
+                        <span class="badge {% if game_state.company_state.supplier_relationship >= 1.5 %}bg-success{% elif game_state.company_state.supplier_relationship >= 1.2 %}bg-warning{% else %}bg-danger{% endif %}">
+                            {{ "%.2f"|format(game_state.company_state.supplier_relationship) }}x
+                        </span>
+                    </p>
+                    <small class="text-muted">
+                        Higher supplier relationships reduce disruption probability and severity.
+                    </small>
+                </div>
+                <div class="col-md-6">
+                    <h5>Recovery Capability</h5>
+                    <p>
+                        <i class="fas fa-sync"></i> Supply Chain Resilience: 
+                        <span class="badge {% if game_state.company_state.supply_chain_efficiency >= 1.5 %}bg-success{% elif game_state.company_state.supply_chain_efficiency >= 1.2 %}bg-warning{% else %}bg-danger{% endif %}">
+                            {{ "%.2f"|format(game_state.company_state.supply_chain_efficiency) }}x
+                        </span>
+                    </p>
+                    <small class="text-muted">
+                        Higher efficiency helps maintain operations during disruptions.
+                    </small>
+                </div>
             </div>
         </div>
     </div>
 </div>
-{% endblock %}
+
+<!-- JavaScript for Marketing Allocation Slider -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const allocationSlider = document.getElementById('market_allocation');
+    const allocationValue = document.getElementById('allocation_value');
+
+    allocationSlider.oninput = function() {
+        allocationValue.textContent = this.value;
+    };
+
+    // Calculate estimated capacity expansion cost
+    const capacityInput = document.getElementById('capacity_expansion');
+    const BASE_COST = 1.0;
+    const SCALE_FACTOR = 0.8;
+
+    capacityInput.addEventListener('input', function() {
+        const expansion = parseFloat(this.value) || 0;
+        const baseCost = expansion * BASE_COST;
+        const actualCost = baseCost * Math.pow(expansion / 1000, -SCALE_FACTOR);
+        
+        const helpText = `Current capacity: {{ game_state.company_state.capacity }} units<br>` +
+                        `Estimated cost: $${actualCost.toFixed(2)}M<br>` +
+                        `Lead time: 2 quarters`;
+        
+        this.nextElementSibling.innerHTML = helpText;
+    });
+});
+</script>
 
 {% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    // Parse chart data from server
-    const chartData = {{ chart_data | safe }};
-    
-    // Create performance chart
-    const ctx = document.getElementById('performanceChart').getContext('2d');
-    const performanceChart = new Chart(ctx, {
+document.addEventListener('DOMContentLoaded', function() {
+    // Financial Performance Chart
+    const financialCtx = document.getElementById('financialChart').getContext('2d');
+    new Chart(financialCtx, {
         type: 'line',
         data: {
-            labels: chartData.quarters.map(q => `Q${q}`),
-            datasets: [
-                {
-                    label: 'Revenue',
-                    data: chartData.revenue,
-                    borderColor: 'rgba(54, 162, 235, 1)',
-                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                    tension: 0.1
-                },
-                {
-                    label: 'Profit',
-                    data: chartData.profit,
-                    borderColor: 'rgba(75, 192, 192, 1)',
-                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                    tension: 0.1
-                },
-                {
-                    label: 'Stock Price',
-                    data: chartData.stock_price,
-                    borderColor: 'rgba(153, 102, 255, 1)',
-                    backgroundColor: 'rgba(153, 102, 255, 0.2)',
-                    tension: 0.1,
-                    yAxisID: 'y1'
-                }
-            ]
+            labels: Array.from({length: {{ game_state.company_state.historical_revenue|length }}}, (_, i) => `Q${i+1}`),
+            datasets: [{
+                label: 'Revenue ($M)',
+                data: {{ game_state.company_state.historical_revenue }},
+                borderColor: 'rgb(54, 162, 235)',
+                tension: 0.1
+            }, {
+                label: 'Profit ($M)',
+                data: {{ game_state.company_state.historical_profit }},
+                borderColor: 'rgb(75, 192, 192)',
+                tension: 0.1
+            }]
         },
         options: {
             responsive: true,
-            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+    // Supply Chain Metrics Chart
+    const supplyChainCtx = document.getElementById('supplyChainChart').getContext('2d');
+    new Chart(supplyChainCtx, {
+        type: 'line',
+        data: {
+            labels: Array.from({length: {{ game_state.company_state.historical_supply_chain_efficiency|length }}}, (_, i) => `Q${i+1}`),
+            datasets: [{
+                label: 'Supply Chain Efficiency',
+                data: {{ game_state.company_state.historical_supply_chain_efficiency }},
+                borderColor: 'rgb(255, 99, 132)',
+                tension: 0.1,
+                yAxisID: 'y'
+            }, {
+                label: 'Supplier Lead Time',
+                data: [{% for _ in game_state.company_state.historical_supply_chain_efficiency %}{{ game_state.company_state.supplier_lead_time }},{% endfor %}],
+                borderColor: 'rgb(54, 162, 235)',
+                tension: 0.1,
+                yAxisID: 'y1'
+            }]
+        },
+        options: {
+            responsive: true,
             scales: {
                 y: {
                     beginAtZero: true,
+                    position: 'left',
                     title: {
                         display: true,
-                        text: 'Revenue/Profit (millions)'
+                        text: 'Efficiency Multiplier'
                     }
                 },
                 y1: {
@@ -219,7 +432,7 @@
                     position: 'right',
                     title: {
                         display: true,
-                        text: 'Stock Price ($)'
+                        text: 'Lead Time (quarters)'
                     },
                     grid: {
                         drawOnChartArea: false
@@ -228,5 +441,7 @@
             }
         }
     });
+});
 </script>
+{% endblock %}
 {% endblock %} 
